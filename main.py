@@ -27,14 +27,26 @@ def top_movie():
         link=movie_link[i].get('href')
         link="https://www.imdb.com/"+link
         movie_list_link.append(link)
-        print(link)
+        
        
-    print(movie_list_name)
-    print(movie_list_score)
-    print(movie_list_link)
+   
     
     
         
     
-top_movie()
+def movie_genere():
+    MOVIE_URL = "https://www.imdb.com//title/tt1262426/?ref_=chtmvm_t_2"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0"
+    }
+    movie_page = requests.get(MOVIE_URL, headers=headers)
+    imdb_movies = BeautifulSoup(movie_page.content, "html.parser")
+    imdb_movies = BeautifulSoup(imdb_movies.prettify(), "html.parser")
+    
+    genres = imdb_movies.find_all("span", class_="ipc-chip__text")
+    print(genres[1].get_text())
+movie_genere()
+    
+    
+    
     
