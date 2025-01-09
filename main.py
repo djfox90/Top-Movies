@@ -68,7 +68,7 @@ def top_movie():
     month = date.strftime("%B")
     df['Month'] = month
     
-    print(df)
+    
            
    
     
