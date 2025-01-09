@@ -2,6 +2,8 @@ from bs4 import BeautifulSoup
 import requests
 import pandas as pd
 from datetime import datetime
+from pathlib import Path
+import time
 
 def top_movie():
     IMDB_URL = "https://www.imdb.com/chart/moviemeter/?ref_=nv_mv_mpm"
@@ -31,7 +33,7 @@ def top_movie():
     musical_list = []
     horror_list = []
        
-    for i in range(1,6):
+    for i in range(1,11):
         
         movie_list_name.append(movie_titles[i].get_text().strip())
         movie_list_score.append(movie_score[i-1].get_text().strip())
@@ -50,7 +52,7 @@ def top_movie():
             
             if genres[i].get_text().strip() in movie_dict:
                 movie_dict[genres[i].get_text().strip()] = True
-        print(movie_dict)
+        
         
         action_list.append(movie_dict["Action"]) 
         drama_list.append(movie_dict["Drama"])
@@ -67,37 +69,17 @@ def top_movie():
     date = datetime.now()
     month = date.strftime("%B")
     df['Month'] = month
+    print(df)
+    
+    if Path("/home/djfox232/Top-Movies/test_4.csv").exists():
+        df.to_csv("test_4.csv",mode="a",index=False, header=False)
+    else:
+        df.to_csv("test_4.csv",mode="a",index=False)
     
     
-           
-   
-    
-    
-        
-    
-def movie_genere():
-    MOVIE_URL = "https://www.imdb.com//title/tt1262426/?ref_=chtmvm_t_2"
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0"
-    }
-    movie_page = requests.get(MOVIE_URL, headers=headers)
-    imdb_movies = BeautifulSoup(movie_page.content, "html.parser")
-    imdb_movies = BeautifulSoup(imdb_movies.prettify(), "html.parser")
-    
-    keys = ["Romance", "Musical", "Fantasy", "Horror"]
-    movie_dict =  {key: False for key in keys}
-    print(movie_dict)
-    g_list = []
-    genres = imdb_movies.find_all("span", class_="ipc-chip__text")
-    for i in range(len(genres)-1):
-        if genres[i].get_text().strip() in movie_dict:
-            movie_dict[genres[i].get_text().strip()] = True
-    print(movie_dict)
-    g_list.append(movie_dict["Horror"])
-    g_list.append(movie_dict["Musical"])
-    print(g_list)
-            
-top_movie()
+while True:
+    top_movie() 
+    time.sleep(43200*60)
     
     
     
